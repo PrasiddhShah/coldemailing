@@ -53,7 +53,7 @@ SMTP_SERVER=smtp.gmail.com
 SMTP_PORT=587
 SMTP_EMAIL=your_email@gmail.com
 SMTP_PASSWORD=your_app_password_here
-RESUME_PATH=docs/Prasiddh_Shah_resume.pdf
+RESUME_DIR=docs
 
 # OPTIONAL - Other Settings
 DEFAULT_OUTPUT_DIR=outputs
@@ -106,9 +106,12 @@ DEFAULT_PER_PAGE=100
 # Create docs directory
 mkdir docs
 
-# Copy your resume to docs/Prasiddh_Shah_resume.pdf
-# Or update RESUME_PATH in .env to point to your resume
+# Copy any PDF resume to the docs/ folder
+# The app will automatically find and use the first PDF
+# Example: copy MyResume.pdf docs/
 ```
+
+The application automatically finds the first PDF file in the `docs/` directory (or whatever directory you set in `RESUME_DIR`). No need to specify the exact filename.
 
 ### 5. Run the Application
 
@@ -175,7 +178,7 @@ GEMINI_API_KEY=your_gemini_key_here
 EMAIL_PROVIDER=smtp
 SMTP_EMAIL=your_email@gmail.com
 SMTP_PASSWORD=your_app_password
-RESUME_PATH=docs/your_resume.pdf
+RESUME_DIR=docs
 ```
 
 **Features:**

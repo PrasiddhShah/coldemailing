@@ -25,7 +25,7 @@ class Config:
     SMTP_PORT = int(os.getenv('SMTP_PORT', '587'))
     SMTP_EMAIL = os.getenv('SMTP_EMAIL', '')
     SMTP_PASSWORD = os.getenv('SMTP_PASSWORD', '')
-    RESUME_PATH = os.getenv('RESUME_PATH', 'docs/Prasiddh_Shah_resume.pdf')
+    RESUME_DIR = os.getenv('RESUME_DIR', 'docs')
 
 
 
@@ -274,3 +274,24 @@ def mask_api_key(api_key):
     if len(api_key) <= 4:
         return "****"
     return "*" * (len(api_key) - 4) + api_key[-4:]
+
+
+def find_resume_path(resume_dir='docs'):
+    """
+    Find the first PDF file in the resume directory.
+
+    Args:
+        resume_dir: Directory to search for PDF files
+
+    Returns:
+        Path to the first PDF found, or None if no PDF exists
+    """
+    if not os.path.exists(resume_dir):
+        return None
+
+    # Look for PDF files in the directory
+    for filename in os.listdir(resume_dir):
+        if filename.lower().endswith('.pdf'):
+            return os.path.join(resume_dir, filename)
+
+    return None

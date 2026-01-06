@@ -104,7 +104,7 @@ SMTP_SERVER=smtp.gmail.com
 SMTP_PORT=587
 SMTP_EMAIL=your_email@gmail.com
 SMTP_PASSWORD=your_app_specific_password
-RESUME_PATH=docs/Prasiddh_Shah_resume.pdf
+RESUME_DIR=docs
 
 # Optional Settings
 DEFAULT_OUTPUT_DIR=outputs
@@ -118,7 +118,7 @@ DEFAULT_PER_PAGE=100
 
 ### 5. Add Your Resume (Optional)
 
-Place your resume at `docs/Prasiddh_Shah_resume.pdf` or update the `RESUME_PATH` in `.env`
+Place any PDF resume in the `docs/` folder. The application will automatically find and attach the first PDF it finds. You can change the directory by setting `RESUME_DIR` in `.env`.
 
 ## Usage
 

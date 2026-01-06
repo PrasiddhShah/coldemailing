@@ -4,7 +4,7 @@ from typing import List, Optional, Dict, Any
 from fastapi.middleware.cors import CORSMiddleware
 import os
 
-from config import load_config
+from config import load_config, find_resume_path
 from apollo.api_client import ApolloClient
 from apollo.company_resolver import resolve_company_input
 from apollo.contact_search import search_contacts
@@ -343,14 +343,16 @@ def generate_email_api(req: EmailDraftRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/api/send-email")
-@app.post("/api/send-email")
 def send_email_api(req: SendEmailRequest):
     try:
         attachment_path = None
         if req.attach_resume:
-             attachment_path = config.RESUME_PATH
-             if not os.path.exists(attachment_path):
-                 print(f"Warning: Resume not found at {attachment_path}")
+             # Find any PDF in the resume directory
+             attachment_path = find_resume_path(config.RESUME_DIR)
+             if attachment_path:
+                 print(f"Using resume: {attachment_path}")
+             else:
+                 print(f"Warning: No PDF resume found in {config.RESUME_DIR}/")
 
         success = email_service.send_email(req.to_email, req.subject, req.body, attachment_path)
         if success:

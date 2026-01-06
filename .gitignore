@@ -12,9 +12,15 @@ outputs/
 # Node
 node_modules/
 package-lock.json
-#personal
+web/dist/
+web/dist-ssr/
+web/.env.local
+
+# Personal files
 docs/
+
 # Logs
+logs/
 *.log
 
 # Python
