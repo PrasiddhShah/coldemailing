@@ -9,6 +9,11 @@ credentials.json
 outputs/
 *.json
 
+# Node
+node_modules/
+package-lock.json
+#personal
+docs/
 # Logs
 *.log
 

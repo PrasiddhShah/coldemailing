@@ -30,6 +30,18 @@ def resolve_company_input(user_input: str, client) -> Dict[str, str]:
 
     elif is_domain(user_input):
         domain = user_input.lower()
+        # Try to resolve domain to an organization ID for better search results
+        # We can reuse the name search or try to find a direct domain lookup
+        # For now, let's treat the domain as a name query which Apollo handles reasonably well
+        # OR better: use the domain but if we find an org, return its ID.
+        
+        # We will attempt to find the org details even if we have the domain
+        # This ensures we get the 'organization_id' which is better for people search
+        org_data = search_company_by_name(domain, client)
+        if org_data:
+             return org_data
+        
+        # Fallback if API lookup fails but it looks like a domain
         return {
             'domain': domain,
             'organization_id': None,

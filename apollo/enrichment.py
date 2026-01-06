@@ -111,6 +111,26 @@ def extract_email_data(enrichment_response: Dict[str, Any]) -> Dict[str, Any]:
     if linkedin_url:
         enriched_data['linkedin_url'] = linkedin_url
 
+    # Extract company domain from organization object if available
+    organization = person.get('organization')
+    if organization and isinstance(organization, dict):
+        domain = organization.get('domain')
+        if domain:
+            enriched_data['company_domain'] = domain
+
+    # Extract location from person or organization
+    city = person.get('city')
+    state = person.get('state')
+    country = person.get('country')
+    
+    location_parts = []
+    if city: location_parts.append(city)
+    if state: location_parts.append(state)
+    elif country: location_parts.append(country)
+    
+    if location_parts:
+        enriched_data['location'] = ", ".join(location_parts)
+
     if person.get('headline'):
         enriched_data['headline'] = person.get('headline')
     if person.get('photo_url'):

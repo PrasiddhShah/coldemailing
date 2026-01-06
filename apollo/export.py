@@ -100,6 +100,7 @@ def format_contact_data(contact: Dict[str, Any]) -> Dict[str, Any]:
         'last_name': contact.get('last_name', ''),
         'title': contact.get('title', ''),
         'company': contact.get('company', ''),
+        'company_domain': contact.get('company_domain', ''),
         'location': contact.get('location', ''),
     }
 

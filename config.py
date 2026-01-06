@@ -10,7 +10,25 @@ class Config:
     APOLLO_API_KEY = os.getenv('APOLLO_API_KEY', '')
     API_BASE_URL = "https://api.apollo.io"
     DEFAULT_PER_PAGE = int(os.getenv('DEFAULT_PER_PAGE', '100'))
+    DEFAULT_PER_PAGE = int(os.getenv('DEFAULT_PER_PAGE', '100'))
     DEFAULT_OUTPUT_DIR = os.getenv('DEFAULT_OUTPUT_DIR', 'outputs')
+
+    # AI Config
+    OPENAI_API_KEY = os.getenv('OPENAI_API_KEY', '')
+    GEMINI_API_KEY = os.getenv('GEMINI_API_KEY', '')
+    LLM_PROVIDER = os.getenv('LLM_PROVIDER', 'gemini') # mock, openai, gemini
+    LLM_MODEL = os.getenv('LLM_MODEL', 'gemini-2.5-flash')
+
+    # Email Config
+    EMAIL_PROVIDER = os.getenv('EMAIL_PROVIDER', 'mock') # mock, smtp
+    SMTP_SERVER = os.getenv('SMTP_SERVER', 'smtp.gmail.com')
+    SMTP_PORT = int(os.getenv('SMTP_PORT', '587'))
+    SMTP_EMAIL = os.getenv('SMTP_EMAIL', '')
+    SMTP_PASSWORD = os.getenv('SMTP_PASSWORD', '')
+    RESUME_PATH = os.getenv('RESUME_PATH', 'docs/Prasiddh_Shah_resume.pdf')
+
+
+
 
     TITLE_MAPPINGS = {
         'recruiter': {
@@ -48,6 +66,22 @@ class Config:
                 'Chief Technical Officer'
             ],
             'seniorities': ['c_suite', 'vp', 'head']
+        },
+        'ceo': {
+            'titles': ['CEO', 'Chief Executive Officer', 'Founder', 'Co-Founder'],
+            'seniorities': ['c_suite', 'founder']
+        },
+        'founder': {
+             'titles': ['Founder', 'Co-Founder', 'Owner'],
+             'seniorities': ['founder', 'c_suite']
+        },
+        'sales': {
+            'titles': ['Sales Manager', 'Account Executive', 'VP of Sales', 'Head of Sales', 'Business Development'],
+            'seniorities': ['manager', 'head', 'vp', 'director']
+        },
+        'marketing': {
+            'titles': ['Marketing Manager', 'CMO', 'VP of Marketing', 'Head of Marketing', 'Product Marketing Manager'],
+            'seniorities': ['manager', 'head', 'vp', 'c_suite']
         }
     }
 

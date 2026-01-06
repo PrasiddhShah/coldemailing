@@ -41,12 +41,17 @@ def search_contacts(
         try:
             # Use organization_ids if available (more reliable than domains)
             search_params = {
-                'person_titles': filters['person_titles'],
-                'person_seniorities': filters['person_seniorities'],
-                'include_similar_titles': True,
                 'per_page': per_page,
-                'page': page
+                'page': page,
             }
+            
+            # Apply filters ONLY if provided
+            if filters['person_titles']:
+                 search_params['person_titles'] = filters['person_titles']
+                 search_params['include_similar_titles'] = True
+            
+            if filters['person_seniorities']:
+                 search_params['person_seniorities'] = filters['person_seniorities']
 
             if company_info and company_info.get('organization_id'):
                 search_params['organization_ids'] = [company_info['organization_id']]
@@ -142,6 +147,7 @@ def extract_contact_data(person: Dict[str, Any]) -> Dict[str, Any]:
         'last_name': last_name,
         'title': person.get('title', ''),
         'company': company,
+        'company_domain': org.get('domain') if isinstance(org, dict) else person.get('organization_domain', ''),
         'location': extract_location(person),
         'linkedin_url': person.get('linkedin_url', ''),
         'seniority': person.get('seniority', ''),
