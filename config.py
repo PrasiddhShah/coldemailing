@@ -33,55 +33,222 @@ class Config:
     TITLE_MAPPINGS = {
         'recruiter': {
             'titles': [
+                # Standard Recruiter Titles
                 'Recruiter',
                 'Technical Recruiter',
-                'HR Manager',
+                'Senior Recruiter',
+                'Lead Recruiter',
+                'Staff Recruiter',
+                'Corporate Recruiter',
+                'IT Recruiter',
+                'Software Recruiter',
+                'Engineering Recruiter',
+
+                # Talent Acquisition Variations
                 'Talent Acquisition',
+                'Talent Acquisition Specialist',
+                'Talent Acquisition Partner',
                 'Talent Acquisition Manager',
+                'Senior Talent Acquisition',
+                'Lead Talent Acquisition',
+                'Talent Acquisition Lead',
+                'Director of Talent Acquisition',
+                'VP Talent Acquisition',
+                'Head of Talent Acquisition',
+                'Talent Acquisition Coordinator',
+                'TA Specialist',
+                'TA Partner',
+                'TA Manager',
+
+                # Management & Leadership
                 'Recruiting Manager',
+                'Recruitment Manager',
                 'Head of Recruiting',
-                'Hiring Manager'
+                'Head of Recruitment',
+                'Director of Recruiting',
+                'Director of Recruitment',
+                'VP of Recruiting',
+                'VP Recruiting',
+                'Hiring Manager',
+
+                # People & HR Variations
+                'People Partner',
+                'People Operations',
+                'People Operations Manager',
+                'People Ops',
+                'HR Manager',
+                'HR Business Partner',
+                'HRBP',
+                'Human Resources Business Partner',
+                'Human Resources Manager',
+                'HR Specialist',
+                'HR Generalist',
+                'Senior HR Business Partner',
+
+                # Talent & Sourcing
+                'Talent Partner',
+                'Talent Manager',
+                'Talent Scout',
+                'Talent Sourcer',
+                'Technical Sourcer',
+                'Sourcing Specialist',
+                'Sourcing Manager',
+                'Lead Sourcer',
+
+                # Other Variations
+                'Recruitment Consultant',
+                'Talent Consultant',
+                'Staffing Manager',
+                'Staffing Specialist',
+                'Workforce Planning',
+                'Talent Advisor'
             ],
-            'seniorities': ['manager', 'head', 'senior']
+            'seniorities': ['manager', 'head', 'senior', 'director', 'vp']
         },
         'engineering_manager': {
             'titles': [
+                # Engineering Manager Titles
                 'Engineering Manager',
                 'Software Engineering Manager',
+                'Senior Engineering Manager',
+                'Staff Engineering Manager',
+                'Development Manager',
+                'Software Development Manager',
+
+                # Team Lead Variations
                 'Team Lead',
                 'Engineering Lead',
-                'Development Manager',
-                'Tech Lead'
+                'Tech Lead',
+                'Technical Lead',
+                'Lead Engineer',
+                'Lead Software Engineer',
+                'Staff Engineer',
+                'Principal Engineer',
+
+                # Director Level
+                'Director of Engineering',
+                'Engineering Director',
+                'Director Software Engineering',
+                'Senior Engineering Manager',
+                'Group Engineering Manager',
+
+                # Specialized
+                'Frontend Engineering Manager',
+                'Backend Engineering Manager',
+                'Full Stack Engineering Manager',
+                'Mobile Engineering Manager',
+                'Platform Engineering Manager',
+                'Infrastructure Engineering Manager',
+                'DevOps Manager',
+                'SRE Manager',
+                'QA Manager',
+                'Test Manager',
+                'Quality Engineering Manager'
             ],
-            'seniorities': ['manager', 'head', 'director']
+            'seniorities': ['manager', 'head', 'director', 'senior', 'vp']
         },
         'cto': {
             'titles': [
+                # C-Level
                 'CTO',
                 'Chief Technology Officer',
+                'Chief Technical Officer',
+                'CIO',
+                'Chief Information Officer',
+                'CPTO',
+                'Chief Product Technology Officer',
+
+                # VP Engineering
                 'VP Engineering',
                 'VP of Engineering',
                 'Vice President of Engineering',
+                'Vice President Engineering',
+                'SVP Engineering',
+                'Senior VP Engineering',
+
+                # Head of Engineering
                 'Head of Engineering',
-                'Chief Technical Officer'
+                'Head of Technology',
+                'Head of Software Engineering',
+                'Head of Software Development',
+                'Head of Product Engineering',
+
+                # Other Executive Tech Roles
+                'VP Technology',
+                'VP of Technology',
+                'Director of Engineering',
+                'Senior Director of Engineering'
             ],
-            'seniorities': ['c_suite', 'vp', 'head']
+            'seniorities': ['c_suite', 'vp', 'head', 'director']
         },
         'ceo': {
-            'titles': ['CEO', 'Chief Executive Officer', 'Founder', 'Co-Founder'],
-            'seniorities': ['c_suite', 'founder']
+            'titles': [
+                'CEO',
+                'Chief Executive Officer',
+                'Founder',
+                'Co-Founder',
+                'President',
+                'Managing Director',
+                'Owner',
+                'Founder & CEO',
+                'Co-Founder & CEO'
+            ],
+            'seniorities': ['c_suite', 'founder', 'owner']
         },
         'founder': {
-             'titles': ['Founder', 'Co-Founder', 'Owner'],
-             'seniorities': ['founder', 'c_suite']
+             'titles': [
+                 'Founder',
+                 'Co-Founder',
+                 'Cofounder',
+                 'Owner',
+                 'Founding Partner',
+                 'Founder & CEO',
+                 'Co-Founder & CTO',
+                 'Founding Engineer'
+             ],
+             'seniorities': ['founder', 'c_suite', 'owner']
         },
         'sales': {
-            'titles': ['Sales Manager', 'Account Executive', 'VP of Sales', 'Head of Sales', 'Business Development'],
-            'seniorities': ['manager', 'head', 'vp', 'director']
+            'titles': [
+                'Sales Manager',
+                'Account Executive',
+                'Senior Account Executive',
+                'VP of Sales',
+                'VP Sales',
+                'Head of Sales',
+                'Director of Sales',
+                'Sales Director',
+                'Business Development',
+                'Business Development Manager',
+                'BDR',
+                'SDR',
+                'Sales Development Representative',
+                'Business Development Representative',
+                'Chief Revenue Officer',
+                'CRO',
+                'Revenue Operations'
+            ],
+            'seniorities': ['manager', 'head', 'vp', 'director', 'c_suite']
         },
         'marketing': {
-            'titles': ['Marketing Manager', 'CMO', 'VP of Marketing', 'Head of Marketing', 'Product Marketing Manager'],
-            'seniorities': ['manager', 'head', 'vp', 'c_suite']
+            'titles': [
+                'Marketing Manager',
+                'CMO',
+                'Chief Marketing Officer',
+                'VP of Marketing',
+                'VP Marketing',
+                'Head of Marketing',
+                'Director of Marketing',
+                'Marketing Director',
+                'Product Marketing Manager',
+                'Growth Manager',
+                'Head of Growth',
+                'VP Growth',
+                'Demand Generation Manager',
+                'Content Marketing Manager',
+                'Digital Marketing Manager'
+            ],
+            'seniorities': ['manager', 'head', 'vp', 'c_suite', 'director']
         }
     }
 
