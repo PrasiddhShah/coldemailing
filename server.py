@@ -107,10 +107,10 @@ def search_api(req: SearchRequest):
         raise HTTPException(status_code=500, detail="Apollo API Client not initialized")
     
     try:
-        with open('server_debug.log', 'a') as f: f.write(f"DEBUG: Starting search for {req.company} with roles {req.roles}\n")
+        with open('logs/server_debug.log', 'a') as f: f.write(f"DEBUG: Starting search for {req.company} with roles {req.roles}\n")
         # Resolve company
         company_info = resolve_company_input(req.company, client)
-        with open('server_debug.log', 'a') as f: f.write(f"DEBUG: Resolved company: {company_info}\n")
+        with open('logs/server_debug.log', 'a') as f: f.write(f"DEBUG: Resolved company: {company_info}\n")
         safe_company_name = company_info['domain'].lower().replace('.', '_') # Use domain for stability
         
         # Check for existing saved files
@@ -150,7 +150,7 @@ def search_api(req: SearchRequest):
         # Search contacts
         # We perform a specific search for the MISSING roles
         # Actually simplest to just search for the requested roles as usual
-        with open('server_debug.log', 'a') as f: f.write(f"DEBUG: Fetching fresh contacts from Apollo...\n")
+        with open('logs/server_debug.log', 'a') as f: f.write(f"DEBUG: Fetching fresh contacts from Apollo...\n")
         fresh_contacts = search_contacts(
             company_domain=company_info['domain'],
             target_roles=req.roles,
@@ -159,7 +159,7 @@ def search_api(req: SearchRequest):
             config=config,
             company_info=company_info
         )
-        with open('server_debug.log', 'a') as f: f.write(f"DEBUG: Fetched {len(fresh_contacts)} contacts.\n")
+        with open('logs/server_debug.log', 'a') as f: f.write(f"DEBUG: Fetched {len(fresh_contacts)} contacts.\n")
 
         # Backfill company_domain from authoritative source if missing
         for contact in fresh_contacts:

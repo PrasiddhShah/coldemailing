@@ -29,7 +29,7 @@ const SearchForm = ({ onSearch, isLoading }) => {
 
     return (
         <div className="card animate-fade-in" style={{ maxWidth: '600px', margin: '0 auto' }}>
-            <h2 style={{ marginBottom: '1.5rem', fontSize: '1.5rem', background: 'linear-gradient(to right, #fff, #94a3b8)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+            <h2 style={{ marginBottom: '1.5rem', fontSize: '1.25rem', color: 'var(--text-primary)', fontWeight: 500 }}>
                 Find Contacts
             </h2>
 
@@ -56,12 +56,14 @@ const SearchForm = ({ onSearch, isLoading }) => {
                                 onClick={() => toggleRole(role.id)}
                                 style={{
                                     padding: '0.5rem 1rem',
-                                    borderRadius: '2rem',
-                                    border: `1px solid ${roles.includes(role.id) ? 'var(--accent-primary)' : 'var(--border-color)'}`,
-                                    background: roles.includes(role.id) ? 'rgba(99, 102, 241, 0.2)' : 'transparent',
-                                    color: roles.includes(role.id) ? 'white' : 'var(--text-secondary)',
+                                    borderRadius: 'var(--radius-sm)',
+                                    border: `1px solid ${roles.includes(role.id) ? 'var(--text-primary)' : 'var(--border-color)'}`,
+                                    background: roles.includes(role.id) ? 'var(--text-primary)' : 'transparent',
+                                    color: roles.includes(role.id) ? 'var(--bg-primary)' : 'var(--text-secondary)',
                                     cursor: 'pointer',
-                                    transition: 'all 0.2s'
+                                    transition: 'all 0.2s',
+                                    fontSize: '0.875rem',
+                                    fontWeight: roles.includes(role.id) ? 500 : 400
                                 }}
                             >
                                 {role.label}

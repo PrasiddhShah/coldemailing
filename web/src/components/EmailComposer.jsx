@@ -65,8 +65,7 @@ const EmailComposer = ({ contact, onClose, onSend, savedContext = '', savedJobLi
             left: 0,
             right: 0,
             bottom: 0,
-            backgroundColor: 'rgba(0, 0, 0, 0.7)',
-            backdropFilter: 'blur(5px)',
+            backgroundColor: 'rgba(0, 0, 0, 0.8)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -90,7 +89,7 @@ const EmailComposer = ({ contact, onClose, onSend, savedContext = '', savedJobLi
                     display: 'flex',
                     flexDirection: 'column'
                 }}>
-                    <h3 style={{ marginBottom: '1.5rem', color: 'var(--accent-primary)' }}>Contact Details</h3>
+                    <h3 style={{ marginBottom: '1.5rem', color: 'var(--text-primary)', fontSize: '1rem', fontWeight: 500 }}>Contact Details</h3>
 
                     <div style={{ marginBottom: '2rem' }}>
                         <h2 style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>{contact.first_name} {contact.last_name}</h2>
@@ -99,7 +98,7 @@ const EmailComposer = ({ contact, onClose, onSend, savedContext = '', savedJobLi
                     </div>
 
                     <div style={{ marginBottom: '2rem' }}>
-                        <label style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Email</label>
+                        <label style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Email</label>
                         <input
                             type="text"
                             value={toEmail}
@@ -110,21 +109,21 @@ const EmailComposer = ({ contact, onClose, onSend, savedContext = '', savedJobLi
                                 background: 'transparent',
                                 border: 'none',
                                 borderBottom: '1px solid var(--border-color)',
-                                color: 'white',
+                                color: 'var(--text-primary)',
                                 width: '100%',
-                                fontSize: '1rem',
+                                fontSize: '0.875rem',
                                 padding: '0.25rem 0'
                             }}
                         />
                     </div>
 
                     <div style={{ marginBottom: '2rem' }}>
-                        <label style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Location</label>
-                        <p style={{ marginTop: '0.25rem' }}>{contact.location || 'N/A'}</p>
+                        <label style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Location</label>
+                        <p style={{ marginTop: '0.25rem', fontSize: '0.875rem' }}>{contact.location || 'N/A'}</p>
                     </div>
 
                     <div style={{ marginBottom: '1rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
-                        <label style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.5rem' }}>Job Description / Context</label>
+                        <label style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.5rem' }}>Job Description / Context</label>
                         <textarea
                             value={userContext}
                             onChange={(e) => setUserContext(e.target.value)}
@@ -134,16 +133,16 @@ const EmailComposer = ({ contact, onClose, onSend, savedContext = '', savedJobLi
                                 width: '100%',
                                 background: 'var(--bg-input)',
                                 border: '1px solid var(--border-color)',
-                                color: 'white',
-                                borderRadius: '4px',
+                                color: 'var(--text-primary)',
+                                borderRadius: 'var(--radius-sm)',
                                 padding: '0.5rem',
                                 resize: 'none',
-                                fontSize: '0.9rem',
+                                fontSize: '0.8rem',
                                 marginBottom: '1rem'
                             }}
                         />
 
-                        <label style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.5rem' }}>Job Link</label>
+                        <label style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.5rem' }}>Job Link</label>
                         <input
                             type="text"
                             value={jobLink}
@@ -153,10 +152,10 @@ const EmailComposer = ({ contact, onClose, onSend, savedContext = '', savedJobLi
                                 width: '100%',
                                 background: 'var(--bg-input)',
                                 border: '1px solid var(--border-color)',
-                                color: 'white',
-                                borderRadius: '4px',
+                                color: 'var(--text-primary)',
+                                borderRadius: 'var(--radius-sm)',
                                 padding: '0.5rem',
-                                fontSize: '0.9rem'
+                                fontSize: '0.8rem'
                             }}
                         />
                     </div>
@@ -168,9 +167,9 @@ const EmailComposer = ({ contact, onClose, onSend, savedContext = '', savedJobLi
                             disabled={isGenerating}
                             style={{
                                 width: '100%',
-                                background: 'rgba(99, 102, 241, 0.1)',
-                                color: 'var(--accent-primary)',
-                                border: '1px solid var(--accent-primary)'
+                                background: 'transparent',
+                                color: 'var(--text-primary)',
+                                border: '1px solid var(--border-color)'
                             }}
                         >
                             {isGenerating ? 'Regenerating...' : 'Regenerate Draft'}
@@ -187,7 +186,7 @@ const EmailComposer = ({ contact, onClose, onSend, savedContext = '', savedJobLi
                     background: 'var(--bg-card)'
                 }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-                        <h3 style={{ color: 'white' }}>Compose Email</h3>
+                        <h3 style={{ color: 'var(--text-primary)', fontSize: '1rem', fontWeight: 500 }}>Compose Email</h3>
                         <button
                             onClick={onClose}
                             style={{
@@ -209,7 +208,7 @@ const EmailComposer = ({ contact, onClose, onSend, savedContext = '', savedJobLi
                             placeholder="Subject"
                             value={subject}
                             onChange={(e) => setSubject(e.target.value)}
-                            style={{ fontSize: '1.1rem', fontWeight: 500 }}
+                            style={{ fontSize: '1rem', fontWeight: 400 }}
                         />
                     </div>
 
@@ -223,7 +222,8 @@ const EmailComposer = ({ contact, onClose, onSend, savedContext = '', savedJobLi
                             resize: 'none',
                             marginBottom: '1.5rem',
                             lineHeight: '1.6',
-                            fontFamily: 'inherit'
+                            fontFamily: 'inherit',
+                            fontSize: '0.875rem'
                         }}
                     />
 

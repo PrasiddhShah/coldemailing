@@ -1,334 +1,370 @@
-# Apollo Cold Emailing Tool
+# Apollo Cold Emailer - Web Application
 
-A professional CLI tool for finding recruiter, engineering manager, and executive contacts at target companies using the Apollo.io API.
+A professional web application for finding and contacting professionals at target companies using the Apollo.io API. Features AI-powered email generation and automated sending.
 
 ## Features
 
+### Contact Discovery
 - **Company Search**: Search by company name, URL, or domain
-- **Role Filtering**: Target recruiters, engineering managers, CTOs, or all decision-makers
-- **Smart Preview**: See contacts before spending credits on email enrichment
-- **Credit Saving**: Two-phase workflow (free search → paid enrichment with confirmation)
-- **JSON Export**: Export contacts with structured metadata
-- **Error Handling**: Robust retry logic and helpful error messages
-- **Secure**: API key stored in environment variables, never committed
+- **Role Filtering**: Target recruiters, engineering managers, CTOs, CEOs, sales, marketing, or founders
+- **Smart Caching**: Automatically saves and merges contacts across searches
+- **Credit-Conscious**: Preview contacts before spending credits on email enrichment
+
+### Email Automation
+- **AI-Powered Drafts**: Generate personalized emails using Gemini or OpenAI
+- **Job Context**: Save job descriptions per company for consistent outreach
+- **Resume Attachment**: Automatically attach your resume
+- **Email Sending**: Send directly via SMTP (Gmail, Outlook, etc.)
+
+### Web Interface
+- **Minimal Design**: Clean, distraction-free interface
+- **Contact Management**: View, enrich, and organize contacts in a grid
+- **Email Composer**: Full-featured composer with context panel
+- **Real-time Updates**: Live search results and notifications
+
+## Architecture
+
+```
+┌─────────────────┐
+│  React Frontend │  (Port 5173)
+│   (Vite + JSX)  │
+└────────┬────────┘
+         │ HTTP API
+         ▼
+┌─────────────────┐
+│  FastAPI Server │  (Port 8000)
+│   (Python)      │
+└────────┬────────┘
+         │
+    ┌────┴────┬─────────┬────────┐
+    ▼         ▼         ▼        ▼
+┌────────┐ ┌──────┐ ┌──────┐ ┌──────┐
+│ Apollo │ │Gemini│ │ SMTP │ │ JSON │
+│  API   │ │ LLM  │ │Email │ │Cache │
+└────────┘ └──────┘ └──────┘ └──────┘
+```
 
 ## Installation
 
-### 1. Prerequisites
+### Prerequisites
 
-- Python 3.7 or higher
-- Apollo.io API key ([Get one here](https://app.apollo.io/#/settings/integrations/api))
+- **Python 3.7+** - Backend server
+- **Node.js 16+** - Frontend development
+- **Apollo.io API Key** - [Get one here](https://app.apollo.io/#/settings/integrations/api)
+- **Gemini API Key** (optional) - For AI email generation: [Get it here](https://aistudio.google.com/app/apikey)
+- **SMTP Credentials** (optional) - For sending emails (Gmail, Outlook, etc.)
 
-### 2. Install Dependencies
+### 1. Clone and Navigate
 
 ```bash
 cd "C:\Users\prasi\Documents\Learn\JOB SEARCh"
+```
+
+### 2. Backend Setup
+
+```bash
+# Create virtual environment
+python -m venv env
+
+# Activate virtual environment
+# Windows:
+env\Scripts\activate
+# Mac/Linux:
+source env/bin/activate
+
+# Install Python dependencies
 pip install -r requirements.txt
 ```
 
-### 3. Configure API Key
+### 3. Frontend Setup
 
 ```bash
-# Copy the example environment file
-copy .env.example .env
-
-# Edit .env and add your Apollo API key
-# APOLLO_API_KEY=your_actual_key_here
+cd web
+npm install
+cd ..
 ```
 
-**IMPORTANT**: Never commit your `.env` file to version control!
+### 4. Configuration
+
+Create a `.env` file in the project root:
+
+```env
+# Required
+APOLLO_API_KEY=your_apollo_api_key_here
+
+# AI Email Generation (Optional - defaults to mock mode)
+LLM_PROVIDER=gemini  # Options: mock, gemini, openai
+GEMINI_API_KEY=your_gemini_api_key_here
+# OPENAI_API_KEY=your_openai_key_here
+LLM_MODEL=gemini-2.5-flash
+
+# Email Sending (Optional - defaults to mock mode)
+EMAIL_PROVIDER=smtp  # Options: mock, smtp
+SMTP_SERVER=smtp.gmail.com
+SMTP_PORT=587
+SMTP_EMAIL=your_email@gmail.com
+SMTP_PASSWORD=your_app_specific_password
+RESUME_PATH=docs/Prasiddh_Shah_resume.pdf
+
+# Optional Settings
+DEFAULT_OUTPUT_DIR=outputs
+DEFAULT_PER_PAGE=100
+```
+
+**Important Notes:**
+- For Gmail SMTP, use an [App Password](https://support.google.com/accounts/answer/185833), not your regular password
+- The LLM_PROVIDER defaults to 'gemini' - set to 'mock' if you don't have an API key
+- The EMAIL_PROVIDER defaults to 'mock' - set to 'smtp' to actually send emails
+
+### 5. Add Your Resume (Optional)
+
+Place your resume at `docs/Prasiddh_Shah_resume.pdf` or update the `RESUME_PATH` in `.env`
 
 ## Usage
 
-### Basic Usage
+### Starting the Application
 
+You need to run both the backend server and frontend development server:
+
+**Terminal 1 - Backend:**
 ```bash
-# Find recruiters at Google
-python apollo_contacts.py "Google" --roles recruiter
-
-# Find engineering managers at Stripe
-python apollo_contacts.py "https://www.stripe.com" --roles engineering_manager
-
-# Find CTOs at Shopify
-python apollo_contacts.py "shopify.com" --roles cto
+python server.py
+# Server starts at http://localhost:8000
 ```
 
-### Advanced Usage
-
+**Terminal 2 - Frontend:**
 ```bash
-# Search for multiple role types
-python apollo_contacts.py "Meta" --roles recruiter engineering_manager cto
-
-# Limit results
-python apollo_contacts.py "Apple" --roles recruiter --limit 50
-
-# Specify output file
-python apollo_contacts.py "Netflix" --roles cto --output netflix_executives.json
-
-# Skip email enrichment (free search only)
-python apollo_contacts.py "Adobe" --roles engineering_manager --skip-enrichment
-
-# Auto-confirm enrichment (no prompt)
-python apollo_contacts.py "Tesla" --roles recruiter --auto-confirm
+cd web
+npm run dev
+# Frontend starts at http://localhost:5173
 ```
 
-### Command-Line Options
+Open your browser to **http://localhost:5173**
 
-| Option | Short | Description |
-|--------|-------|-------------|
-| `--roles` | `-r` | Target roles: `recruiter`, `engineering_manager`, `cto`, or `all` |
-| `--output` | `-o` | Output JSON filename (default: auto-generated with timestamp) |
-| `--output-dir` | | Output directory (default: `outputs/`) |
-| `--limit` | `-l` | Maximum number of contacts to find |
-| `--skip-enrichment` | | Skip email enrichment (export without emails - free) |
-| `--auto-confirm` | `-y` | Skip confirmation prompt for enrichment |
-| `--verbose` | `-v` | Verbose output with debug information |
+### Using the Web Interface
 
-## How It Works
+1. **Search for Contacts**
+   - Enter company name (e.g., "Google", "stripe.com")
+   - Select target roles (Recruiter, Eng Manager, CTO, etc.)
+   - Set max results
+   - Click "Search Contacts"
 
-### Workflow
+2. **Review Results**
+   - Contacts appear in a grid with name, title, company, location
+   - Contacts without emails show "Reveal Email" button
+   - Contacts with emails show "Draft Email" button
 
-```
-1. Company Resolution
-   User Input → Company Domain
+3. **Reveal Emails** (Costs 1 Apollo Credit)
+   - Click "Reveal Email" to enrich a contact
+   - Email appears once enriched
 
-2. Contact Search (FREE - No Credits)
-   Apollo People API → Find contacts by role
+4. **Draft & Send Emails**
+   - Click "Draft Email" on an enriched contact
+   - **Left Panel**: View contact details and add job context
+   - **Right Panel**: Edit email subject and body
+   - Click "Regenerate Draft" to use AI (requires LLM API key)
+   - Click "Send Email" to send via SMTP
 
-3. Preview & Confirmation
-   Display contacts → Ask to proceed
+### Smart Caching System
 
-4. Email Enrichment (COSTS CREDITS)
-   Apollo Enrichment API → Get emails
+The app automatically saves contacts to `outputs/{company_domain}.json`:
+- **First search**: Fetches from Apollo and saves
+- **Subsequent searches**: Loads cached contacts and merges new ones
+- **Credit savings**: Uses cached emails when available, only enriches new contacts
 
-5. JSON Export
-   Save contacts with metadata
-```
+Example: Search for "Google recruiters" → saves to `outputs/google_com.json` → next search for "Google engineers" merges with existing file.
 
-### API Operations
+## API Endpoints
 
-1. **Company Search** (if needed)
-   - Endpoint: `/api/v1/mixed_companies/search`
-   - Converts company name → domain
+The backend provides these REST API endpoints:
 
-2. **People Search** (FREE)
-   - Endpoint: `/api/v1/mixed_people/api_search`
-   - Finds people by company domain and job titles
-   - **Does NOT consume credits**
-
-3. **Email Enrichment** (COSTS CREDITS)
-   - Endpoint: `/api/v1/people/match`
-   - Adds email addresses and phone numbers
-   - **Consumes 1 credit per contact**
-
-## Output Format
-
-The tool exports contacts to JSON with the following structure:
-
-```json
-{
-  "metadata": {
-    "export_date": "2026-01-05T14:30:45Z",
-    "company": "Google Inc",
-    "company_domain": "google.com",
-    "total_contacts": 45,
-    "target_roles": ["recruiter", "engineering_manager"],
-    "enriched": true
-  },
-  "contacts": [
-    {
-      "name": "John Doe",
-      "first_name": "John",
-      "last_name": "Doe",
-      "title": "Engineering Manager",
-      "company": "Google",
-      "location": "San Francisco, CA",
-      "email": "john.doe@google.com",
-      "phone": "+1-555-0100",
-      "linkedin_url": "https://linkedin.com/in/johndoe",
-      "seniority": "manager",
-      "departments": ["engineering"],
-      "apollo_id": "abc123"
-    }
-  ]
-}
-```
-
-## Role Types
-
-The tool supports three predefined role types:
-
-### 1. Recruiter
-- Job Titles: Recruiter, Technical Recruiter, HR Manager, Talent Acquisition, etc.
-- Seniorities: Manager, Head, Senior
-
-### 2. Engineering Manager
-- Job Titles: Engineering Manager, Software Engineering Manager, Team Lead, etc.
-- Seniorities: Manager, Head, Director
-
-### 3. CTO
-- Job Titles: CTO, Chief Technology Officer, VP Engineering, etc.
-- Seniorities: C-Suite, VP, Head
-
-Use `--roles all` to search for all three types at once.
-
-## Examples
-
-### Example 1: Find Recruiters at Google
-
-```bash
-python apollo_contacts.py "Google" --roles recruiter
-```
-
-**Output:**
-```
-Resolving company: Google
-✓ Found: Google Inc (google.com)
-
-Searching for recruiter contacts...
-  Found 45 contacts so far...
-
-+---+----------------------+---------------------------+--------------+
-| # | Name                 | Title                     | Location     |
-+---+----------------------+---------------------------+--------------+
-| 1 | Jane Smith           | Technical Recruiter       | San Francisco|
-| 2 | John Doe             | Recruiting Manager        | New York     |
-...
-
-EMAIL ENRICHMENT CONFIRMATION
-Contacts to enrich: 45
-Estimated credit cost: ~45 credits
-
-Proceed with email enrichment? (y/n): y
-
-Enriching emails: |████████████████████████████████████████| 45/45 (100.0%)
-
-✓ Successfully exported 45 contacts to: outputs/google_contacts_2026-01-05_14-30-45.json
-  - Contacts with emails: 42/45
-```
-
-### Example 2: Preview Without Enrichment
-
-```bash
-python apollo_contacts.py "Stripe" --roles engineering_manager --skip-enrichment
-```
-
-Searches for contacts but skips email enrichment (no credits used).
-
-### Example 3: Multiple Roles
-
-```bash
-python apollo_contacts.py "https://www.shopify.com" --roles recruiter engineering_manager cto --limit 100
-```
-
-Finds up to 100 recruiters, engineering managers, and CTOs at Shopify.
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/health` | GET | Check server status |
+| `/api/search` | POST | Search for contacts by company/role |
+| `/api/enrich` | POST | Enrich contacts with emails (costs credits) |
+| `/api/generate-email` | POST | Generate AI email draft |
+| `/api/send-email` | POST | Send email via SMTP |
 
 ## Project Structure
 
 ```
 C:\Users\prasi\Documents\Learn\JOB SEARCh\
-├── apollo_contacts.py          # Main CLI entry point
-├── config.py                    # Configuration management
+├── server.py                    # FastAPI backend server
+├── config.py                    # Configuration & role mappings
 ├── requirements.txt             # Python dependencies
-├── .env                         # API key (DO NOT COMMIT!)
-├── .env.example                 # Template for API key
+├── .env                         # Environment variables (DO NOT COMMIT!)
 ├── README.md                    # This file
-├── apollo/                      # Package directory
+├── SETUP_NOTES.md               # Setup instructions
+│
+├── apollo/                      # Apollo.io integration
 │   ├── __init__.py
 │   ├── api_client.py           # Apollo API wrapper
-│   ├── company_resolver.py     # Company name/URL → domain
-│   ├── contact_search.py       # People search logic
-│   ├── enrichment.py           # Email enrichment
-│   ├── export.py               # JSON export
-│   └── display.py              # Console formatting
-└── outputs/                     # JSON export directory
+│   ├── company_resolver.py     # Company name → domain resolution
+│   ├── contact_search.py       # People search with role filtering
+│   ├── enrichment.py           # Email enrichment (costs credits)
+│   ├── export.py               # JSON export with metadata
+│   ├── llm.py                  # AI email generation (Gemini/OpenAI)
+│   └── mailer.py               # SMTP email sending
+│
+├── web/                         # React frontend
+│   ├── src/
+│   │   ├── App.jsx             # Main application component
+│   │   ├── App.css             # Minimal styling (unused)
+│   │   ├── index.css           # Global styles & theme
+│   │   ├── main.jsx            # React entry point
+│   │   └── components/
+│   │       ├── SearchForm.jsx  # Company/role search form
+│   │       ├── ContactGrid.jsx # Contact card display
+│   │       └── EmailComposer.jsx # Email drafting modal
+│   ├── index.html
+│   ├── package.json
+│   └── vite.config.js
+│
+├── outputs/                     # Contact export cache (JSON)
+├── logs/                        # Server debug logs
+├── docs/                        # Documents (resume, etc.)
+└── tests/                       # Test scripts
 ```
 
-## Error Handling
+## Configuration Details
 
-The tool handles common errors gracefully:
+### Role Mappings
 
-- **Invalid API Key**: Prompts to check `.env` file
-- **Company Not Found**: Suggests providing domain directly
-- **Zero Results**: Offers suggestions for broader search
-- **Rate Limits**: Automatically retries with exponential backoff
-- **Insufficient Credits**: Shows current balance and aborts
-- **Network Errors**: Retries up to 3 times
+The system supports 6 role types defined in `config.py`:
 
-## Security Best Practices
+1. **Recruiter** - Recruiters, Talent Acquisition, HR Business Partners
+2. **Engineering Manager** - Engineering Managers, Team Leads, Directors of Engineering
+3. **CTO** - CTOs, VPs of Engineering, Heads of Engineering
+4. **CEO** - CEOs, Founders, Presidents
+5. **Sales** - Account Executives, Sales Directors, BDRs, SDRs
+6. **Marketing** - Marketing Managers, CMOs, Growth leads
 
-1. **Never commit `.env` file** - It contains your API key
-2. **Use `.gitignore`** - Ensure `.env` is excluded from version control
-3. **Rotate API keys** - Periodically regenerate your Apollo API key
-4. **Limit permissions** - Use API keys with minimum required permissions
+Each role has 50-100+ title variations and appropriate seniority filters.
+
+### LLM Providers
+
+- **mock**: Returns placeholder text (no API key needed)
+- **gemini**: Uses Google Gemini (recommended, cheaper)
+- **openai**: Uses OpenAI GPT models
+
+### Email Providers
+
+- **mock**: Logs email to console (testing)
+- **smtp**: Sends via SMTP server (Gmail, Outlook, etc.)
+
+## Apollo API Credit Usage
+
+- **Company Resolution**: FREE
+- **People Search**: FREE (no credits consumed)
+- **Email Enrichment**: ~1 credit per contact
+- **Phone Enrichment**: Included with email enrichment
+
+**Best Practice**: Always search first (free) → review contacts → then enrich selectively to save credits.
 
 ## Troubleshooting
 
-### Issue: "Invalid API key"
-**Solution**: Check that `APOLLO_API_KEY` is set correctly in your `.env` file
+### Backend Issues
 
-### Issue: "No contacts found"
-**Solutions**:
-- Try different roles: `--roles recruiter engineering_manager cto`
-- Remove the `--limit` flag
-- Verify the company domain is correct
+**"Invalid API key"**
+- Check `APOLLO_API_KEY` in `.env`
+- Verify key at https://app.apollo.io/#/settings/integrations/api
 
-### Issue: "Rate limit exceeded"
-**Solution**: Wait a few minutes before making more requests. The tool will automatically retry.
+**"LLM generation failed"**
+- Verify `GEMINI_API_KEY` or `OPENAI_API_KEY` in `.env`
+- Set `LLM_PROVIDER=mock` to disable AI features
 
-### Issue: "Insufficient credits"
-**Solution**: Check your Apollo account and upgrade your plan if needed
+**"Email send failed"**
+- Check SMTP credentials in `.env`
+- For Gmail, use an [App Password](https://support.google.com/accounts/answer/185833)
+- Set `EMAIL_PROVIDER=mock` to test without sending
 
-## API Credit Usage
+### Frontend Issues
 
-- **People Search**: FREE (no credits consumed)
-- **Email Enrichment**: ~1 credit per contact
-- **Best Practice**: Always preview contacts before enriching to avoid wasting credits
+**"Failed to connect to server"**
+- Ensure backend is running on port 8000: `python server.py`
+- Check for CORS errors in browser console
+
+**Page won't load**
+- Ensure frontend is running: `cd web && npm run dev`
+- Check port 5173 is available
+
+**Search returns no results**
+- Try different roles or broader search
+- Check company name is correct
+- Verify Apollo account has remaining credits
+
+## Security Best Practices
+
+1. **Never commit `.env`** - Contains API keys and passwords
+2. **Use App Passwords** - For Gmail/Outlook SMTP
+3. **Rotate API Keys** - Periodically regenerate keys
+4. **Review .gitignore** - Ensure `.env`, `outputs/`, `logs/` are excluded
 
 ## Development
 
-### Running Tests
+### Running in Production
 
+**Backend:**
 ```bash
-# Install dev dependencies
-pip install pytest
-
-# Run tests
-pytest
+uvicorn server:app --host 0.0.0.0 --port 8000
 ```
 
-### Code Structure
+**Frontend:**
+```bash
+cd web
+npm run build
+npm run preview
+```
 
-- **Modular Design**: Each module has a single responsibility
-- **Error Handling**: Custom exceptions for different error types
-- **Type Hints**: Full type annotations for better IDE support
-- **Documentation**: Comprehensive docstrings
+### Testing
+
+Test individual components:
+```bash
+# Test Apollo API connection
+python tests/test_api_key.py
+
+# Test people search
+python tests/test_people_search.py
+
+# Test account status
+python tests/check_account_status.py
+```
+
+## API Requirements
+
+This tool requires a **paid Apollo.io plan** with API access:
+- **Basic Plan**: ~$49-79/month - Includes API access
+- **Professional Plan**: ~$99-149/month - More credits
+- **Organization Plan**: Custom pricing - Full API access
+
+The free Apollo plan does NOT include API access.
 
 ## License
 
 This tool is for personal use in job searching and professional networking.
 
-## Support
-
-For issues or questions:
-1. Check the troubleshooting section above
-2. Review Apollo API documentation: https://docs.apollo.io/
-3. Ensure your API key has the necessary permissions
-
-## Changelog
-
-### Version 1.0.0 (2026-01-05)
-- Initial release
-- Company search by name, URL, or domain
-- Role filtering (recruiter, engineering_manager, cto)
-- Two-phase workflow (search → enrich)
-- JSON export with metadata
-- Comprehensive error handling
-
 ## Credits
 
 Built with:
-- [Apollo.io API](https://www.apollo.io/) - Contact data provider
+- [Apollo.io API](https://www.apollo.io/) - Contact data
+- [FastAPI](https://fastapi.tiangolo.com/) - Backend framework
+- [React](https://react.dev/) - Frontend framework
+- [Vite](https://vite.dev/) - Build tool
+- [Google Gemini](https://ai.google.dev/) - AI email generation
 - [Python Requests](https://requests.readthedocs.io/) - HTTP library
-- [Tabulate](https://github.com/astanin/python-tabulate) - Table formatting
-- [python-dotenv](https://github.com/theskumar/python-dotenv) - Environment management
+
+## Changelog
+
+### Version 2.0.0 (2026-01-06)
+- Added React web interface
+- Added AI-powered email generation (Gemini/OpenAI)
+- Added SMTP email sending
+- Added smart contact caching and merging
+- Minimal UI redesign
+- Multi-role support (6 role types)
+
+### Version 1.0.0 (2026-01-05)
+- Initial CLI tool release
+- Apollo API integration
+- Basic contact search and enrichment

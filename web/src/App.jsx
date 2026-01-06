@@ -118,17 +118,18 @@ function App() {
         <div style={{
           display: 'inline-block',
           padding: '0.5rem 1rem',
-          borderRadius: '2rem',
-          background: 'rgba(99, 102, 241, 0.1)',
-          color: 'var(--accent-primary)',
-          fontSize: '0.875rem',
-          fontWeight: 600,
-          marginBottom: '1rem'
+          borderRadius: '0.25rem',
+          background: 'transparent',
+          color: 'var(--text-secondary)',
+          fontSize: '0.75rem',
+          fontWeight: 500,
+          marginBottom: '1rem',
+          border: '1px solid var(--border-color)'
         }}>
           Apollo Cold Emailer
         </div>
-        <h1 style={{ fontSize: '2.5rem', fontWeight: 700, letterSpacing: '-0.02em' }}>
-          Find & Connect with <span style={{ color: 'var(--accent-primary)' }}>Top Talent</span>
+        <h1 style={{ fontSize: '2.5rem', fontWeight: 600, letterSpacing: '-0.02em' }}>
+          Find & Connect with <span style={{ color: 'var(--text-primary)' }}>Top Talent</span>
         </h1>
       </header>
 
@@ -140,9 +141,9 @@ function App() {
           margin: '2rem auto',
           padding: '1rem',
           borderRadius: 'var(--radius-md)',
-          background: 'rgba(239, 68, 68, 0.1)',
-          color: '#ef4444',
-          border: '1px solid rgba(239, 68, 68, 0.2)',
+          background: 'var(--bg-card)',
+          color: 'var(--text-secondary)',
+          border: '1px solid var(--border-color)',
           textAlign: 'center'
         }}>
           {error}
@@ -172,14 +173,12 @@ function App() {
           position: 'fixed',
           bottom: '2rem',
           right: '2rem',
-          background: notification.type === 'error' ? 'rgba(239, 68, 68, 0.9)' : 'rgba(16, 185, 129, 0.9)',
-          color: 'white',
+          background: 'var(--bg-card)',
+          color: 'var(--text-primary)',
           padding: '1rem 2rem',
-          borderRadius: '8px',
-          boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+          borderRadius: 'var(--radius-md)',
           zIndex: 2000,
-          backdropFilter: 'blur(4px)',
-          border: '1px solid rgba(255, 255, 255, 0.1)'
+          border: '1px solid var(--border-color)'
         }}>
           {notification.message}
         </div>

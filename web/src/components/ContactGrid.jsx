@@ -21,21 +21,23 @@ const ContactGrid = ({ contacts, onEnrich, onDraftEmail }) => {
                             </div>
                             {contact.email ? (
                                 <span style={{
-                                    background: 'rgba(16, 185, 129, 0.2)',
-                                    color: '#10b981',
+                                    background: 'transparent',
+                                    color: 'var(--text-secondary)',
                                     padding: '2px 8px',
-                                    borderRadius: '4px',
-                                    fontSize: '0.75rem'
+                                    borderRadius: 'var(--radius-sm)',
+                                    fontSize: '0.7rem',
+                                    border: '1px solid var(--border-color)'
                                 }}>
                                     Enriched
                                 </span>
                             ) : (
                                 <span style={{
-                                    background: 'rgba(255, 255, 255, 0.1)',
+                                    background: 'transparent',
                                     color: 'var(--text-secondary)',
                                     padding: '2px 8px',
-                                    borderRadius: '4px',
-                                    fontSize: '0.75rem'
+                                    borderRadius: 'var(--radius-sm)',
+                                    fontSize: '0.7rem',
+                                    border: '1px solid var(--border-color)'
                                 }}>
                                     No Email
                                 </span>
@@ -49,7 +51,7 @@ const ContactGrid = ({ contacts, onEnrich, onDraftEmail }) => {
 
                         {contact.email ? (
                             <div style={{ marginBottom: '1rem' }}>
-                                <p style={{ color: 'var(--accent-primary)', fontSize: '0.875rem' }}>{contact.email}</p>
+                                <p style={{ color: 'var(--text-primary)', fontSize: '0.875rem', fontFamily: 'monospace' }}>{contact.email}</p>
                             </div>
                         ) : null}
 
@@ -60,9 +62,9 @@ const ContactGrid = ({ contacts, onEnrich, onDraftEmail }) => {
                                     className="btn"
                                     style={{
                                         flex: 1,
-                                        background: 'var(--bg-secondary)',
+                                        background: 'transparent',
                                         border: '1px solid var(--border-color)',
-                                        color: 'white'
+                                        color: 'var(--text-primary)'
                                     }}
                                 >
                                     Reveal Email
