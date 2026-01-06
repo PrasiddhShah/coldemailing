@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 const SearchForm = ({ onSearch, isLoading }) => {
     const [company, setCompany] = useState('');
     const [roles, setRoles] = useState(['recruiter']);
-    const [limit, setLimit] = useState(10);
+    const [limit, setLimit] = useState(50);
 
     const availableRoles = [
         { id: 'recruiter', label: 'Recruiter' },

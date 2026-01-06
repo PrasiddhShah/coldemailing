@@ -57,7 +57,7 @@ A professional web application for finding and contacting professionals at targe
 ### 1. Clone and Navigate
 
 ```bash
-cd "C:\Users\prasi\Documents\Learn\JOB SEARCh"
+cd path/to/apollo-cold-emailer
 ```
 
 ### 2. Backend Setup
@@ -189,7 +189,7 @@ The backend provides these REST API endpoints:
 ## Project Structure
 
 ```
-C:\Users\prasi\Documents\Learn\JOB SEARCh\
+apollo-cold-emailer/
 ├── server.py                    # FastAPI backend server
 ├── config.py                    # Configuration & role mappings
 ├── requirements.txt             # Python dependencies

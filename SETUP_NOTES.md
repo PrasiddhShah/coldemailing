@@ -9,7 +9,7 @@ Complete setup instructions for the Apollo Cold Emailer web application.
 **Backend:**
 ```bash
 # Navigate to project root
-cd "C:\Users\prasi\Documents\Learn\JOB SEARCh"
+cd path/to/apollo-cold-emailer
 
 # Create virtual environment
 python -m venv env
@@ -270,7 +270,7 @@ lsof -ti:8000 | xargs kill -9
 ## Directory Structure After Setup
 
 ```
-C:\Users\prasi\Documents\Learn\JOB SEARCh\
+apollo-cold-emailer/
 ├── .env                         ← Your configuration
 ├── env/                         ← Python virtual environment
 ├── web/node_modules/            ← Node packages
