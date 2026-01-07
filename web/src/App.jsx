@@ -126,10 +126,10 @@ function App() {
           marginBottom: '1rem',
           border: '1px solid var(--border-color)'
         }}>
-          Apollo Cold Emailer
+          Recruiter Outreach Tool
         </div>
         <h1 style={{ fontSize: '2.5rem', fontWeight: 600, letterSpacing: '-0.02em' }}>
-          Find & Connect with <span style={{ color: 'var(--text-primary)' }}>Top Talent</span>
+          Find <span style={{ color: 'var(--text-primary)' }}>Recruiters</span> & Email Them
         </h1>
       </header>
 

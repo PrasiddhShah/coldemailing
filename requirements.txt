@@ -4,5 +4,10 @@ tabulate
 fastapi
 uvicorn
 pydantic
-google-generativeai
+google-genai
 markdown
+
+# Database
+sqlalchemy
+psycopg2-binary
+alembic

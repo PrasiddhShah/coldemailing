@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: apollo_postgres
+    restart: unless-stopped
+    environment:
+      # Database configuration
+      POSTGRES_DB: apollo_contacts
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: apollo_password_123
+      # Timezone
+      TZ: UTC
+    ports:
+      # Map container port 5432 to host port 5432
+      - "5432:5432"
+    volumes:
+      # Persist data between container restarts
+      - postgres_data:/var/lib/postgresql/data
+      # Optional: Mount init scripts
+      # - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  # Named volume for data persistence
+  postgres_data:
+    driver: local

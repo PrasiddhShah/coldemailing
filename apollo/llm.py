@@ -65,23 +65,24 @@ Best,
 
     def _generate_gemini(self, contact: Dict[str, Any], user_context: str, job_link: str = "") -> Dict[str, str]:
         try:
-            import google.generativeai as genai
-            genai.configure(api_key=self.api_key)
-            
+            from google import genai
+
+            # Initialize client with API key
+            client = genai.Client(api_key=self.api_key)
+
             # Map robust model names if needed, or rely on pass-through
             model_name = self.model or "gemini-2.5-flash"
             if "gpt" in model_name: model_name = "gemini-2.5-flash" # Fallback if user switched provider but kept model name
-            
-            model = genai.GenerativeModel(model_name)
-            
+
             prompt = self._build_prompt(contact, user_context, job_link)
-            
-            # Force JSON structure in prompt just in case, though mime_type helps
-            response = model.generate_content(
-                prompt,
-                generation_config={"response_mime_type": "application/json"}
+
+            # Use new client.models.generate_content API
+            response = client.models.generate_content(
+                model=model_name,
+                contents=prompt,
+                config={"response_mime_type": "application/json"}
             )
-            
+
             return json.loads(response.text)
         except Exception as e:
             print(f"Gemini Error: {e}")
@@ -89,18 +90,14 @@ Best,
 
     def _build_prompt(self, contact: Dict[str, Any], user_context: str, job_link: str = "") -> str:
         # Import here to allow "hot reloading" if the user changes the file without restart
-        try:
-            import sys
-            if 'prompt' in sys.modules:
-                import importlib
-                import prompt
-                importlib.reload(prompt)
-                from prompt import EMAIL_PROMPT_TEMPLATE
-            else:
-                from prompt import EMAIL_PROMPT_TEMPLATE
-        except ImportError:
-            # Fallback if file missing
-            return self._fallback_prompt(contact, user_context)
+        import sys
+        if 'scripts.prompt' in sys.modules:
+            import importlib
+            import scripts.prompt
+            importlib.reload(scripts.prompt)
+            from scripts.prompt import EMAIL_PROMPT_TEMPLATE
+        else:
+            from scripts.prompt import EMAIL_PROMPT_TEMPLATE
 
         # Prepare data for safe formatting
         data = {
@@ -110,24 +107,11 @@ Best,
             'company': contact.get('company', ''),
             'location': contact.get('location', ''),
             'headline': contact.get('headline', ''),
-            'user_context': user_context or "",
-            'job_description': user_context or "", # Map UI input to the new variable name
+            'job_description': user_context or "",
             'job_link': job_link or "[Job Link]"
         }
-        
+
         try:
             return EMAIL_PROMPT_TEMPLATE.format(**data)
         except KeyError as e:
-            return f"Error in prompt.py: Missing variable {e}. Please check your template."
-
-    def _fallback_prompt(self, contact: Dict[str, Any], user_context: str) -> str:
-        return f"""
-        Write a personalized cold email to:
-        Name: {contact.get('name')}
-        Title: {contact.get('title')}
-        Company: {contact.get('company')}
-        
-        Context: {user_context}
-        
-        Return JSON with "subject" and "body".
-        """
+            raise ValueError(f"Error in scripts/prompt.py: Missing variable {e}. Please check your template.")

@@ -5,6 +5,10 @@
 apollo_api_key.txt
 credentials.json
 
+# Prompt files with personal information
+prompt.py
+scripts/prompt.py
+
 # Output files
 outputs/
 *.json
