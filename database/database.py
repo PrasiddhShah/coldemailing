@@ -1,11 +1,10 @@
 """
-Database connection and session management for PostgreSQL.
+Database connection and session management for PostgreSQL/Supabase.
 """
 import os
 from dotenv import load_dotenv
 from sqlalchemy import create_engine, text
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import declarative_base, sessionmaker
 from contextlib import contextmanager
 
 # Load environment variables from .env file
@@ -14,24 +13,64 @@ load_dotenv()
 # Create declarative base for models
 Base = declarative_base()
 
-# Database connection URL from environment
-DATABASE_URL = os.getenv(
-    'DATABASE_URL',
-    f"postgresql://{os.getenv('DB_USER', 'postgres')}:"
-    f"{os.getenv('DB_PASSWORD', 'password')}@"
-    f"{os.getenv('DB_HOST', 'localhost')}:"
-    f"{os.getenv('DB_PORT', '5432')}/"
-    f"{os.getenv('DB_NAME', 'apollo_contacts')}"
-)
 
-# Create SQLAlchemy engine
-engine = create_engine(
-    DATABASE_URL,
-    pool_pre_ping=True,  # Verify connections before using
-    pool_size=10,
-    max_overflow=20,
-    echo=False  # Set to True for SQL query logging
-)
+def get_database_url():
+    """
+    Get database URL from environment.
+
+    Supports:
+    - DATABASE_URL: Full connection string (Supabase or any PostgreSQL)
+    - Individual DB_* variables for local PostgreSQL
+
+    For Supabase, use the connection string from:
+    Project Settings > Database > Connection string > URI
+    """
+    # Check for full DATABASE_URL first (recommended for Supabase)
+    database_url = os.getenv('DATABASE_URL')
+
+    if database_url:
+        # Supabase uses 'postgres://' but SQLAlchemy needs 'postgresql://'
+        if database_url.startswith('postgres://'):
+            database_url = database_url.replace('postgres://', 'postgresql://', 1)
+        return database_url
+
+    # Fall back to individual variables (local development)
+    return (
+        f"postgresql://{os.getenv('DB_USER', 'postgres')}:"
+        f"{os.getenv('DB_PASSWORD', 'password')}@"
+        f"{os.getenv('DB_HOST', 'localhost')}:"
+        f"{os.getenv('DB_PORT', '5432')}/"
+        f"{os.getenv('DB_NAME', 'apollo_contacts')}"
+    )
+
+
+DATABASE_URL = get_database_url()
+
+# Detect if using Supabase (for connection pool tuning)
+IS_SUPABASE = 'supabase' in DATABASE_URL.lower() if DATABASE_URL else False
+
+# Create SQLAlchemy engine with appropriate settings
+engine_kwargs = {
+    'pool_pre_ping': True,  # Verify connections before using
+    'echo': False,  # Set to True for SQL query logging
+}
+
+if IS_SUPABASE:
+    # Supabase connection pooler settings (use smaller pool for managed DB)
+    engine_kwargs.update({
+        'pool_size': 5,
+        'max_overflow': 10,
+        'pool_timeout': 30,
+        'pool_recycle': 1800,  # Recycle connections every 30 min
+    })
+else:
+    # Local PostgreSQL settings
+    engine_kwargs.update({
+        'pool_size': 10,
+        'max_overflow': 20,
+    })
+
+engine = create_engine(DATABASE_URL, **engine_kwargs)
 
 # Create session factory
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
@@ -110,8 +149,15 @@ def test_connection():
     """
     try:
         with engine.connect() as conn:
-            conn.execute(text("SELECT 1"))
-        print(f"[OK] Database connection successful: {DATABASE_URL.split('@')[1]}")
+            result = conn.execute(text("SELECT version()"))
+            version = result.scalar()
+
+        # Extract host info safely (hide password)
+        host_info = DATABASE_URL.split('@')[1] if '@' in DATABASE_URL else 'unknown'
+        db_type = "Supabase" if IS_SUPABASE else "PostgreSQL"
+
+        print(f"[OK] {db_type} connection successful: {host_info}")
+        print(f"[OK] Server version: {version.split(',')[0] if version else 'unknown'}")
         return True
     except Exception as e:
         print(f"[ERROR] Database connection failed: {e}")

@@ -1,5 +1,5 @@
 """Database package for Apollo Cold Emailer."""
-from .database import get_db, get_db_session, init_db, test_connection, engine, Base
+from .database import get_db, get_db_session, init_db, test_connection, engine, Base, IS_SUPABASE
 from .models import Company, Contact, Search, EmailDraft, EmailHistory, Tag, ContactTag
 from .db_operations import (
     upsert_company, upsert_contact, create_search,
@@ -12,7 +12,7 @@ from .db_operations import (
 
 __all__ = [
     # Database
-    'get_db', 'get_db_session', 'init_db', 'test_connection', 'engine', 'Base',
+    'get_db', 'get_db_session', 'init_db', 'test_connection', 'engine', 'Base', 'IS_SUPABASE',
     # Models
     'Company', 'Contact', 'Search', 'EmailDraft', 'EmailHistory', 'Tag', 'ContactTag',
     # Operations
