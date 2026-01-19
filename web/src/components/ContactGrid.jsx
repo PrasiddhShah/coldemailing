@@ -47,6 +47,24 @@ const ContactGrid = ({ contacts, onEnrich, onDraftEmail }) => {
                         <div style={{ marginBottom: '1.5rem', fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
                             <p>{contact.company || "Company Unknown"}</p>
                             <p>{contact.location || "Location Unknown"}</p>
+                            {contact.linkedin_url && (
+                                <a
+                                    href={contact.linkedin_url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    style={{
+                                        color: 'var(--accent-primary)',
+                                        fontSize: '0.875rem',
+                                        textDecoration: 'none',
+                                        display: 'inline-flex',
+                                        alignItems: 'center',
+                                        gap: '0.25rem',
+                                        marginTop: '0.25rem'
+                                    }}
+                                >
+                                    LinkedIn Profile →
+                                </a>
+                            )}
                         </div>
 
                         {contact.email ? (
