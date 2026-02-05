@@ -12,7 +12,7 @@ class CompanyResponse(BaseModel):
 class PersonResponseRaw(BaseModel):
     id: str
     first_name: str
-    last_name: str
+    last_name_obfuscated: str
     title: str | None = None
     has_email: bool = False
     has_state: bool = False
