@@ -3,6 +3,7 @@ from contextlib import asynccontextmanager
 
 from app.db.connection import DatabaseConnection
 from app.db.schema import metadata, engine
+from app.api.apollo import apollo
 
 db = DatabaseConnection()
 @asynccontextmanager
@@ -14,3 +15,4 @@ async def lifespan(app: FastAPI):
     await db.disconnect()
 
 app = FastAPI(app=lifespan)
+app.include_router(apollo)

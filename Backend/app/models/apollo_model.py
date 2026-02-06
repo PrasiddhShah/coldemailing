@@ -33,6 +33,12 @@ class PersonResponseEnriched(BaseModel):
     state: str | None = None
     country: str | None = None
 
+class CompanyCard(BaseModel):
+    company_id: str
+    company_name: str
+    company_logo_url: str | None = None
+
+
 class CompaniesAPIResponse(BaseModel):
     organizations: list[CompanyResponse] = []
 
